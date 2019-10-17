@@ -1,81 +1,8 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <stdio.h>
 #include <string.h>
-/*char* conversordeBase(char *bits, int n, int m){
-	int i = 0, cont = 0, j = 0, tam = 0;
-	char *bits2 = (char*)calloc(8,sizeof(char));
-	if (n < m){
-		for (i=0;i<8;i++){				
-			if (bits[i] == ','){
-				bits2 = &bits[i+1];
-				bits[i] = NULL;
-				cont++;
-			}
-		}
-		if (cont == 0){
-			tam = strlen(bits);
-			for (i=tam-1;i>=0;i--){
-				bits2 = bits2 + (bits[i] - '0')*pow(n,j);
-				j++;
-			}
-			return bits2;
-		}
-		else if (cont != 0){
-			j = 1;
-			for (i=tam-1;i>=0;i--){
-				bits2 = bits2 + (bits[i] - '0')*pow(n,-j);
-				j++;
-			}
-			for (i=tam-1;i>=0;i--){
-				bits2 = bits2 + (bits[i] - '0')*pow(n,j);
-				j++;
-			}
-			return bits2;
-		}
-	}
-}*/
-float binarioDecimal(char *entrada){
-	int i = 0,tam = strlen(entrada),j = 0;
-	float out = 0;
-	for (i=tam-1;i>=0;i--){
-		out = out + (entrada[i] - '0')*pow(2,j);
-		j++;
-	}
-	return out;
-}
-char* decimalBinario(int entrada){
-	char *saida,i = 7;
-	saida = (char*)calloc(8,sizeof(char));
-	int entrada2 = entrada;
-	while(entrada2!=0){
-		saida[i]= entrada2%2; //Converte cada posição do vetor de char em um inteiro, ou seja, cada posição do vetor string será um valor inteiro
-		entrada2 = entrada2/2;
-		i--;
-	}
-	return saida;
-}
-float binDeciVirgula(char* entrada){
-	int i = 0, tam = strlen(entrada), j = 1;
-	float out = 0;
-	for (i=0;i<tam;i++){
-		out = out + (entrada[i] - '0')*pow(2,-j);
-		j++;
-	}
-	return out;
-}
-char* decBinVirgula(char *entrada){
-	char *saida = (char*)calloc(8,sizeof(char));
-	int entrada2 = 0, tam = strlen(entrada);
-	entrada2 = entrada;
-	entrada2 = entrada2*10;
-	while(entrada2!=0){
-		saida[tam] = entrada2%2;
-		entrada2 = entrada2/2;
-		tam--;
-	}
-	return saida;
-}
+#include <math.h>
+#define bits2 8 
 char* conversorDe(char *entrada, int n, int m){
 	int tam = strlen(entrada), cont = 0, j = 0, i = 0, k = 0;
 	char *out = NULL;
@@ -147,31 +74,16 @@ char* conversorDe(char *entrada, int n, int m){
 			tam = tamM + tamD;
 			out = (char*)calloc(tam,sizeof(char));
 			i = 7;
-			if (aux>=0.5){
-				while(aux!=0.0){
-					aux2 = aux*2;
-					if (aux2 == 1){
-						out[i] = '1';
-					}
-					else if (aux2 == 0){
-						out[i] = '0';
-					}
-					aux = (2.0*aux) - aux2;
-					i--;
+			while(aux!=0.0){
+				aux2 = aux*2;
+				if (aux2 == 1){
+					out[i] = '1';
 				}
-			}
-			else if (aux<0.5){
-				while(aux!=0.0){
-					aux2 = aux*2;
-					if (aux2 == 1){
-						out[i] = '0';
-					}
-					else if (aux2 == 0){
-						out[i] = '1';
-					}
-					aux = (2.0*aux) - aux2;
-					i--;
+				else if (aux2 == 0){
+					out[i] = '0';
 				}
+				aux = (2.0*aux) - aux2;
+				i--;
 			}
 			out[i] = ',';
 			i--;
@@ -661,90 +573,4 @@ char* conversorDe(char *entrada, int n, int m){
 		}
 			return out;
 	}
-
-}
-int main(){
-	int i = 0, op = 1,op2 = 0, entrada = 0, n = 0, m = 0;
-	char *bits = (char*)calloc(8,sizeof(char)),*bits2 = (char*)calloc(8,sizeof(char)), *entrada2 = (char*)calloc(8,sizeof(char));
-	char *saida3 = (char*)calloc(16,sizeof(char)), *out = (char*)calloc(16,sizeof(char));
-	//float saida2 = 0.0, saida = 0.0;
-	printf("Entre com o numero: ");
-	scanf("%s",bits);
-	printf("Entre com a base do numero: ");
-	scanf("%d",&n);
-	printf("Entre com a base de conversao: ");
-	scanf("%d",&m);
-	out = conversorDe(bits,n,m);
-	for (i=0;i<16;i++){
-		printf("%c",out[i]);
-	}
-	/*while(op!=0){
-		printf("\nEntre com o numero: ");
-		scanf("%s",entrada);
-		printf("\nEntre com a base do numero e a base de conversao");
-		scanf("%d %d",&n,&m);
-
-		if (op == 1){
-			printf("1 - Numeros sem virgula\n2 - Numeros com virgula\n0 - Menu Anterior\n");
-			scanf("%d",&op2);
-			if (op2 == 1){
-				printf("Valor para conversao na base 10:\n ");
-				scanf("%d",&entrada);
-				bits = decimalBinario(entrada);
-				for(i=0;i<8;i++){
-					printf("%d\t",bits[i]);
-				}
-			}
-				if (op2 == 2){
-					printf("Valor para conversao na base 10:\n ");
-					scanf("%s",entrada2);
-					int tam = strlen(entrada2);
-					for (i=0;i<tam;i++){
-						if (entrada2[i] == ','){
-							bits[i] = &entrada2[i];
-							entrada2[i] = NULL;
-						}
-					}
-					out = decimalBinario(entrada2);
-					bits2 = decBinVirgula(bits);
-					strcpy(saida3,out);
-					printf("\n%s",saida3);
-
-				}
-		}
-		if (op == 2){
-			printf("1 - Numeros sem virgula\n2 - Numeros com virgula\n0 - Menu Anterior\n");
-			scanf("%d",&op2);
-			if (op2 == 1){
-				printf("Valor para conversao:\n ");
-				scanf("%s",bits);
-				saida = binarioDecimal(bits);
-				printf("\n%f",saida);
-			}
-			if (op2 == 2){
-				printf("Valor para conversao:\n ");
-				scanf("%s",bits);
-				for (i=0;i<8;i++){
-					if (bits[i] == ','){
-						bits2 = &bits[i+1];
-						bits[i] = NULL;
-					}
-				}
-				saida = binarioDecimal(bits);
-				saida2 = binDeciVirgula(bits2);
-				saida2 += saida;
-				printf("\n%f\n",saida2);
-			}
-		}
-		/*if (op == 3){
-			printf("Valor para conversão:\n ");
-			scanf("%s",bits);
-			printf("Base do numero:\n ");
-			scanf("%d",&n);
-			printf("Base desejada: ");
-			scanf("%d",&m);
-			entrada2 = conversordeBase(bits,n,m);
-			printf("\n%s\n",entrada2);
-		}
-	}*/
 }
